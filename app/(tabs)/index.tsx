@@ -1,22 +1,12 @@
-// AppNavigator.tsx
+// index.tsx
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import LanguageSelection from '../../components/HomePage/LanguageSelection';
-import CategorySelection from '../../components/CategorySelection/CategorySelection';
+import AppNavigator from './AppNavigator'; // Adjust path if needed
 
-
-
-const Stack = createStackNavigator();
-
-const AppNavigator = () => {
-  return (
-    
-      <Stack.Navigator initialRouteName="LanguageSelection">
-        <Stack.Screen name="LanguageSelection" component={LanguageSelection} />
-        <Stack.Screen name="CategorySelection" component={CategorySelection} />
-      </Stack.Navigator>
-  );
+const App: React.FC = () => {  // Use 'App' as the component name
+    return (
+            <AppNavigator />
+    );
 };
 
-export default AppNavigator;
+export default App;  // Export the component as 'App'

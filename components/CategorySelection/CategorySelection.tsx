@@ -1,23 +1,131 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-// Define the type for the navigation prop
+type RootStackParamList = {
+  HookahMenu: undefined;
+  ColdDrinksMenu: undefined;
+  CoffeeMenu: undefined;
+  DessertsMenu: undefined;
+};
+
 type CategorySelectionProps = {
-  navigation: StackNavigationProp<{
-    ItemList: { category: string }; // Define the params for this route
-  }>;
+  navigation: StackNavigationProp<RootStackParamList>;
+};
+
+type RouteNames = keyof RootStackParamList;
+
+type Category = {
+  id: string;
+  name: string;
+  image: any;
+  route: RouteNames;
 };
 
 const CategorySelection: React.FC<CategorySelectionProps> = ({ navigation }) => {
+  const categories: Category[] = [
+    {
+      id: 'coffee',
+      name: 'Coffee',
+      image: require('../../assets/images/Coffee.jpg'),
+      route: 'CoffeeMenu'
+    },
+    {
+      id: 'coldDrinks',
+      name: 'Cold Drinks',
+      image: require('../../assets/images/Drinks.jpg'),
+      route: 'ColdDrinksMenu'
+    },
+    {
+      id: 'hookah',
+      name: 'Hookah',
+      image: require('../../assets/images/Hookah.jpg'),
+      route: 'HookahMenu'
+    },
+    {
+      id: 'desserts',
+      name: 'Desserts',
+      image: require('../../assets/images/Desserts.jpg'),
+      route: 'DessertsMenu'
+    }
+  ];
+
   return (
-    <View>
-      <Text>Select Category</Text>
-      <Button title="Hookah" onPress={() => navigation.navigate('ItemList', { category: 'Hookah' })} />
-      <Button title="Drinks" onPress={() => navigation.navigate('ItemList', { category: 'Drinks' })} />
-      <Button title="Food" onPress={() => navigation.navigate('ItemList', { category: 'Food' })} />
+    <View style={styles.container}>
+      <Text style={styles.title}>Please Select Catagory</Text>
+      <View style={styles.grid}>
+        {categories.map((category) => (
+          <TouchableOpacity
+            key={category.id}
+            style={styles.categoryButton}
+            onPress={() => navigation.navigate(category.route)}
+          >
+            <Image source={category.image} style={styles.categoryImage} />
+            <View style={styles.overlay}>
+              <Text style={styles.categoryText}>{category.name}</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 };
 
+const { width, height } = Dimensions.get('window');
+const itemWidth = (width - 48) / 2;
+// Calculate height based on 9:16 ratio
+const itemHeight = (itemWidth * 16) / 9;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#1a1a1a',
+    padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FDEAC1',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    gap: 16,
+  },
+  categoryButton: {
+    width: itemWidth,
+    height: itemHeight, // Using the calculated height for 9:16 ratio
+    borderRadius: 12,
+    overflow: 'hidden',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    marginBottom: 16,
+  },
+  categoryImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  categoryText: {
+    color: '#FDEAC1',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});
+
 export default CategorySelection;
+
+//test
